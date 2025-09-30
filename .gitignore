@@ -1,0 +1,4 @@
+*__pycache__/
+logs/
+multi_ai_agents.egg-info.db/
+.env
