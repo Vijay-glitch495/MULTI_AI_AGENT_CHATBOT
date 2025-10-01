@@ -413,6 +413,23 @@ docker network create dind-network
 docker network connect dind-network jenkins-dind
 docker network connect dind-network sonarqube-dind
 ```
+🔹 Why this matters for Jenkins builds
+
+If Jenkins is running inside its own container and you want it to send results to SonarQube:
+
+Without a shared network → Jenkins can’t resolve sonarqube-dind. It would try localhost:9000, which points to inside Jenkins container itself, not SonarQube.
+
+With a shared network → Jenkins can talk to SonarQube container by name → no errors when running scans or pushing reports.
+
+✅ Summary:
+
+docker network connect makes containers share the same internal network.
+
+They still keep their ports (8080, 9000 etc.) for host access.
+
+The network just makes service-to-service communication cleaner (use container names instead of IPs).
+
+This avoids build errors in Jenkins where tools (like Sonar Scanner) need to call sonarqube-dind.
 
 3. Update the `Jenkinsfile` to use the container name instead of the IP address:  (already done in code )
 
@@ -488,16 +505,16 @@ docker exec -u root -it jenkins-dind bash
 2. Update the package list and install required tools:
 
 ```bash
-apt update
-apt install -y unzip curl
+apt-get update
+apt-get install -y awscli
 ```
 
 3. Download and install **AWS CLI**:
 
 ```bash
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
-./aws/install
+./aws/install --update
 ```
 
 4. Verify the installation:
