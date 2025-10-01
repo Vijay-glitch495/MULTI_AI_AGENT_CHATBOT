@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-        SONAR_PROJECT_KEY = 'MULTI_AI_AGENT'#project name in sonarqube
+        SONAR_PROJECT_KEY = 'Multi_AI_Agent'#project name in sonarqube
 		SONAR_SCANNER_HOME = tool 'vijaysonar'# sonarqubescanner name in jenkins
         // AWS_REGION = 'us-east-1'
         // ECR_REPO = 'my-repo'
